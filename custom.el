@@ -26,6 +26,7 @@
 (setq ac-auto-start t)
 (setq ac-quick-help-delay 0.5)
 (define-key ac-mode-map [(control tab)] 'auto-complete)
+;; 使用这命令echo "" | g++ -v -x c++ -E - 查看头文件导入的路径
 (defun my-ac-config () (setq ac-clang-flags (mapcar(lambda (item)(concat "-I" item))
                                                    (split-string "
 /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1
