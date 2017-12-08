@@ -87,3 +87,10 @@
 ;; evil-nerd-commenter
 (maybe-require-package 'evil-nerd-commenter)
 (evilnc-default-hotkeys)
+
+;; show trailing whitespace
+(setq-default show-trailing-whitespace t)
+(setq-default indicate-empty-lines t)
+
+;; show whitespace
+(global-whitespace-mode 1)
