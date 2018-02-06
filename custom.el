@@ -103,6 +103,7 @@
 (global-whitespace-mode 1)
 (add-to-list 'default-frame-alist
              '(font . "Courier New-18"))
+(setq-default indicate-empty-lines t)
 ;; nyan-mode
 (maybe-require-package 'nyan-mode)
 (setq default-mode-line-format
