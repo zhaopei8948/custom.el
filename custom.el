@@ -33,13 +33,21 @@
 ;; 使用这命令echo "" | g++ -v -x c++ -E - 查看头文件导入的路径
 (defun my-ac-config () (setq ac-clang-flags (mapcar(lambda (item)(concat "-I" item))
                                                    (split-string "
-/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/../../../../include/c++/7.2.0
-/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/../../../../include/c++/7.2.0/x86_64-pc-linux-gnu
-/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/../../../../include/c++/7.2.0/backward
-/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include
-/usr/local/include
-/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include-fixed
-/usr/include
+;;/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/../../../../include/c++/7.2.0
+;;/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/../../../../include/c++/7.2.0/x86_64-pc-linux-gnu
+;;/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/../../../../include/c++/7.2.0/backward
+;;/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include
+;;/usr/local/include
+;;/usr/lib/gcc/x86_64-pc-linux-gnu/7.2.0/include-fixed
+;;/usr/include
+;; mac os x
+;;/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1
+;;/usr/local/include
+;;/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/8.0.0/include
+;;/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
+;;/usr/include
+;;/System/Library/Frameworks
+;;/Library/Frameworks
 ")))
        (setq-default ac-sources '(ac-source-abbrev ac-source-dictionary ac-source-words-in-same-mode-buffers))
        (add-hook 'emacs-lisp-mode-hook 'ac-emacs-lisp-mode-setup)
@@ -49,7 +57,10 @@
        (add-hook 'auto-complete-mode-hook 'ac-common-setup)
        (global-auto-complete-mode t))
 (defun my-ac-cc-mode-setup ()
-  (setq ac-sources (append '(ac-source-clang ac-source-yasnippet ac-source-c-headers) ac-sources)))
+  (setq ac-sources (append '(ac-source-clang ac-source-yasnippet ac-source-c-headers) ac-sources))
+  (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+    (maybe-require-package 'ggtags)
+    (ggtags-mode 1)))
 (add-hook 'c-mode-common-hook 'my-ac-cc-mode-setup)
 (add-hook 'c++-mode-hook 'my-ac-cc-mode-setup)
 ;; ac-source-gtags
@@ -87,3 +98,32 @@
 ;; evil-nerd-commenter
 (maybe-require-package 'evil-nerd-commenter)
 (evilnc-default-hotkeys)
+
+;; setting show whitespace
+(global-whitespace-mode 1)
+(add-to-list 'default-frame-alist
+             '(font . "Courier New-18"))
+;; nyan-mode
+(maybe-require-package 'nyan-mode)
+(setq default-mode-line-format
+      (list ""
+            'mode-line-modified
+            "<"
+            "赵配" ;; 这里可以改成自己的名字神马的
+            "> "
+            "%10b"
+            '(:eval (when nyan-mode (list (nyan-create))));;注意添加此句到你的format配置列表中
+            " "
+            'default-directory
+            " "
+            "%[("
+            'mode-name
+            'minor-mode-list
+            "%n"
+            'mode-line-process
+            ")%]--"
+            "Line %l--"
+            '(-3 . "%P")
+            "-%-"))
+(nyan-mode t);;启动nyan-mode
+(nyan-start-animation);;开始舞动吧（会耗cpu资源）
